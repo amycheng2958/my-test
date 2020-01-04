@@ -1,5 +1,7 @@
 <template>
-  <div>{{ msg }}</div>
+  <div>{{ msg }}
+    
+  </div>
 </template>
 
 <script>
@@ -11,6 +13,6 @@ export default {
   }
 };
 </script>
-
+ 
 <style scoped>
 </style>
