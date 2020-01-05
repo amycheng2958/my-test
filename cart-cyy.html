@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +10,67 @@
         .active {
             background-color: #ddd
         }
+        .message-box {
+            padding: 10px 20px;
+            
+        }
+        .message-box-close {
+            float: right;
+        }
+        .success {
+            background: #4fc08d;
+            border: 1px solid #42b983;
+        }
+        .warning {
+            background: #f66;
+            border: 1px solid #d63200;
+        }
     </style>
     <script src="https://at.alicdn.com/t/font_1281272_fepjp89tyz9.js"></script>
 </head>
+
 <body>
     <div id="app">
         <!-- 插值文本 -->
         <h2 :title="title">{{title}}</h2>
+        
+        <!-- 批量清除弹窗 -->
+        <div>
+            <button @click="$bus.$emit('message-close')">清空提示框</button>
+        </div>
+
+        <!-- 弹窗 -->
+        <message class="success" :show.sync="isShow">
+            <!-- 命名为title的具名插槽 -->
+            <template v-slot:title="slotProps">
+                <strong>hello{{ slotProps.title }}</strong>
+            </template>
+            <!-- 默认插槽 -->
+            <template>
+                新增课程成功！
+            </template>
+        </message>
+        
+        <message :show.sync="isShowWarn" class="warning">
+            <!-- 命名为title的具名插槽 -->
+            <template v-slot:title>
+                <strong>警告</strong>
+            </template>
+            <!-- 默认插槽 -->
+            <template>
+                请输入课程的名称！
+            </template>
+        </message>
 
         <!-- 新增课程 -->
-        <course-add @add-course="addCourse"></course-add>
-        
+        <course-add v-model="course" @add-course="addCourse"></course-add>
+
+        <!-- 批量更新课程价格 -->
+        <p>
+            <input v-model.number="price" type="number" step="1" />
+            <button @click="batchUpdate">批量更新价格</button>
+        </p>
+
         <!-- 课程列表组件 -->
         <course-list :courses="courses"></course-list>
 
@@ -32,29 +83,53 @@
             <!-- 监听器 -->
             课程总数: {{totalCount}}
         </p>
+
     </div>
     <script src="vue.js"></script>
     <script>
-        // 课程列表组件
-        Vue.component('course-list',{
+        // 总线
+        Vue.prototype.$bus = new Vue()
+        // 弹窗组件
+        Vue.component('message', {
+            props: ['show'],
             data() {
-                    return {
-                        selectedCourse: ''
-                    }
-                },
+                return {
+                    title: '来自子组件的标题'
+                }
+            },
+            template: `
+                <div class= "message-box" v-if="show">
+                    <slot name="title" :title="title">默认标题</slot>
+                    <slot></slot>
+                    <span class="message-box-close" @click="$emit('update:show',false)">X</span>
+                </div>
+            `,
+            mounted() {
+                this.$bus.$on('message-close',()=>{
+                    this.$emit('update:show',false)
+                })
+            }
+        })
+        // 课程列表组件
+        Vue.component('course-list', {
+            data() {
+                return {
+                    selectedCourse: ''
+                }
+            },
             props: {
                 courses: {
                     type: Array,
-                    default: ()=>[]
+                    default: () => []
                 }
             },
             template: `<!-- 条件渲染 -->
                 <p v-if="courses.length == 0">没有任何课程信息</p>
                 <!-- 列表渲染 -->
                 <div v-else>
-                    <div v-for="item in courses" :key="item" :class="{active: selectedCourse === item}"
+                    <div v-for="(item,index) in courses" :key="index" :class="{active: selectedCourse === item}"
                     @click="selectedCourse = item">
-                        {{ item }}
+                        {{ item.name }} - ￥ {{ item.price }}
                     </div>
                     <!-- style -->
                     <!-- <div v-for="item in courses" :key="item" 
@@ -65,64 +140,89 @@
                 </div>`
         })
         // 课程新增组件
-        Vue.component('course-add',{
-            data() {
-                return {
-                    course: ''
-                }
-            },
+        Vue.component('course-add', {
+            // model: {
+            //     value: 'value',
+            //     event: 'input'
+            // },
+            props: ['value'],
+            template: `<!-- 表单输入 -->
+                 <div>
+                    <p>
+                        <input ref="inp" type="text" :value="value" @input="onInput" @keydown.enter="addCourse">
+                        <button @click="addCourse">新增</button>
+                    </p>
+                </div>
+                `,
             methods: {
                 addCourse() {
                     // 派发事件通知父组件新增课程
-                    if(this.course !== '') {
-                        this.$emit('add-course',this.course);
-                        this.course = ''
-                    } 
+                    this.$emit('add-course');
+                },
+                onInput(e) {
+                    this.$emit('input', e.target.value)
                 }
             },
-            template: `<!-- 表单输入 -->
-                <p>
-                    <input v-model.trim="course" @keydown.enter="addCourse">
-                    <button @click="addCourse">新增</button>
-                </p>`
+            mounted () {
+                this.$refs.inp.focus();
+            },
         })
+
         const app = new Vue({
             el: '#app',
             data() {
                 return {
                     title: '购物车',
+                    course: '',
                     courses: [],
                     totalCount: 0,
+                    isShow: false,
+                    isShowWarn: false,
+                    price: 0
                 }
             },
-            beforeCreate () {
-                console.log('beforeCreate');
+            beforeCreate() {
+                // console.log('beforeCreate');
             },
-            async created () {
-                console.log('created');
+            async created() {
+                // console.log('created');
                 this.courses = await this.getCourses();
+                // 批量更新课程价格
+                this.batchUpdate()
             },
-            beforeMount () {
-                console.log('beforeMount');
+            beforeMount() {
+                // console.log('beforeMount');
             },
-            mounted () {
-                console.log('mounted');
+            mounted() {
+                // console.log('mounted');
             },
-            beforeUpdate () {
-                console.log('beforeUpdate')
+            beforeUpdate() {
+                // console.log('beforeUpdate')
             },
-            updated () {
-                console.log('updated')
+            updated() {
+                // console.log('updated')
             },
             methods: {
-                addCourse(course) {
-                    this.courses.push(course);
+                addCourse() {
+                    if(this.course) {
+                        this.courses.push({name: this.course, price: 0});
+                        this.course = '',
+                        this.isShow = true
+                    }else {
+                        this.isShowWarn = true
+                    }
+                },
+                batchUpdate() {
+                    this.courses.forEach(element => {
+                        Vue.set(element,'price',this.price)
+                    });
+                    // this.courses.map((item)=> item.price = this.price)
                 },
                 getCourses() {
-                    return new Promise(resolve=>{
-                        setTimeout(()=>{
-                            resolve(['web高级','web全栈'])
-                        },2000)
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve([{name: 'web全栈'},{name: 'web高级'}])
+                        }, 0)
                     })
                 }
             },
@@ -155,4 +255,5 @@
         console.log(app.$options.render)
     </script>
 </body>
+
 </html>
