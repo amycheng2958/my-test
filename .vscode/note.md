@@ -11,7 +11,7 @@
 `source control`中：填写`message`,`git: commit`
 * **代码推送** `git: push`
 ### 扩展
-`vetur`，[vue vscode snippets](https://marketplace.visualstudio.com/items?itemName=sdras.vue-vscode-snippets), `IntelliJ IDEA Key Bindings` , `debugger for chrome`
+`vetur`，[vue vscode snippets](https://marketplace.visualstudio.com/items?itemName=sdras.vue-vscode-snippets), `IntelliJ IDEA Key Bindings` , `debugger for chrome`，` Prettier - Code formatter`
 
 # [vue](https://cn.vuejs.org/)
 * 引用vue.js，创建vue实例
@@ -48,7 +48,28 @@
   - `destroyed`：组件已销毁，作用同上
   - `errorCaptured`： 2.5.0+ 新增捕获错误处理
 * [组件](https://cn.vuejs.org/v2/guide/components.html)
-* 
+  - **定义**：组件是`可复用的`Vue 实例，准确讲它们是`VueComponent的实例`，继承自Vue,
+  - **优点**：组件化可以增加代码的`复用性`、`可维护性`和`可测试性`,
+  - **使用场景**：
+    - `通用组件`:实现最基本的功能，具有通用性、复用性，例如按钮组件、输入框组件、布局组件等。
+    - `业务组件`:它们完成具体业务，具有一定的复用性，例如登录组件、轮播图组件。
+    - `页面组件`:组织应用各部分独立内容，需要时在不同页面组件间切换，例如列表页、详情页组件
+  - **如何使用组件**
+    - `定义`:Vue.component()，components选项，sfc 
+    - `分类`:有状态组件，functional，abstract - 通信:props，$emit()/$on()，provide/inject，$children/$parent/$root/$attrs/$listeners 内容分发:`slot`，`template`，`v-slot`
+    - `使用及优化`:is，keep-alive，异步组件
+  - **组件的本质**
+    - `vue中的组件经历如下过程`：
+    组件配置 => VueComponent实例 => render() => Virtual DOM=> DOM 所以组件的本质是产生虚拟DOM
+* [插槽](https://cn.vuejs.org/v2/guide/components-slots.html)
+  - 具名插槽
+  - 作用域插槽，让插槽内容能够访问子组件中才有的数据
+* [API](https://cn.vuejs.org/v2/api/#%E5%85%A8%E5%B1%80-API)
+  - 数据相关 全局api： `Vue.set()`，`Vue.delete()`，实例api：`this.$set()`，`this.$delete()`
+  - 事件相关：`vm.$on`，`vm.$off` ，`vm.once`，`vm.$emit`
+  - 事件总线
+* 组件或元素引用
+  - ref被用来给元素或子组件注册引用信息，引用信息将会注册在父组件的$refs对象上。如果在普通的DOM元素上使用，引用指向的就是DOM元素，如果用在子组件上，引用就指向组件实例
 
 
 
