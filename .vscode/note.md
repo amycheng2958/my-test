@@ -70,6 +70,15 @@
   - 事件总线
 * 组件或元素引用
   - ref被用来给元素或子组件注册引用信息，引用信息将会注册在父组件的$refs对象上。如果在普通的DOM元素上使用，引用指向的就是DOM元素，如果用在子组件上，引用就指向组件实例
+  - **注意**：
+    - ref 是作为渲染结果被创建的，在初始渲染时不能访问它们 
+    - $refs 不是响应式的，不要试图用它在模板中做数据绑定
+    - 当 v-for 用于元素或组件时，引用信息将是包含 DOM 节点或组件实例的数组。
+* [动画](https://cn.vuejs.org/v2/guide/transitions.html)
+  - **Vue 在插入、更新或者移除 DOM 时，提供多种不同方式的应用过渡效果。 包括以下工具**:
+  - 在 CSS 过渡和动画中自动应用 class 
+  - [结合自定义过渡的类名](https://cn.vuejs.org/v2/guide/transitions.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%B8%A1%E7%9A%84%E7%B1%BB%E5%90%8D)，配合使用第三方 CSS 动画库，如 Animate.css 
+  - 在过渡钩子函数中使用 JavaScript 直接操作 DOM 可以配合使用第三方JavaScript 动画库，如 Velocity.js
 
 
 
