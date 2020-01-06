@@ -1,4 +1,4 @@
-const hello = 'hello'
+const hello = "hello";
 console.log(hello);
-console.log('cyy')
-console.log('eee')
+console.log("cyy");
+console.log("eee");

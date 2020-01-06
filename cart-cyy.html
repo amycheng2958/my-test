@@ -25,7 +25,16 @@
             background: #f66;
             border: 1px solid #d63200;
         }
+        /* 动画样式 */
+        /* 入场之前状态 */
+        /* .fade-enter,.fade-leave-to {
+            opacity: 0;
+        }
+        .fade-enter-active,.fade-leave-active {
+            transition: opacity 1.5s
+        } */
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <script src="https://at.alicdn.com/t/font_1281272_fepjp89tyz9.js"></script>
 </head>
 
@@ -40,7 +49,8 @@
         </div>
 
         <!-- 弹窗 -->
-        <message class="success" :show.sync="isShow">
+        <!-- <message class="success" :show.sync="isShow"> -->
+        <message class="success" ref="msgSuccess">
             <!-- 命名为title的具名插槽 -->
             <template v-slot:title="slotProps">
                 <strong>hello{{ slotProps.title }}</strong>
@@ -51,7 +61,7 @@
             </template>
         </message>
         
-        <message :show.sync="isShowWarn" class="warning">
+        <message ref="msgWarning" class="warning">
             <!-- 命名为title的具名插槽 -->
             <template v-slot:title>
                 <strong>警告</strong>
@@ -91,24 +101,36 @@
         Vue.prototype.$bus = new Vue()
         // 弹窗组件
         Vue.component('message', {
-            props: ['show'],
+            // props: ['show'],
             data() {
                 return {
-                    title: '来自子组件的标题'
+                    title: '来自子组件的标题',
+                    show: false
                 }
             },
             template: `
-                <div class= "message-box" v-if="show">
-                    <slot name="title" :title="title">默认标题</slot>
-                    <slot></slot>
-                    <span class="message-box-close" @click="$emit('update:show',false)">X</span>
-                </div>
+                <transition 
+                name="custom-classes-transition"
+                enter-active-class="animated tada"
+                leave-active-class="animated bounceOutRight">
+                    <div class="message-box" v-if="show">
+                        <slot name="title" :title="title">默认标题</slot>
+                        <slot></slot>
+                        <span class="message-box-close" @click="toggle">X</span>
+                    </div>
+                </transition>
             `,
             mounted() {
                 this.$bus.$on('message-close',()=>{
-                    this.$emit('update:show',false)
+                    this.toggle()
+                    // this.$emit('update:show',false)
                 })
-            }
+            },
+            methods: {
+                toggle() {
+                    this.show = !this.show
+                }
+            },
         })
         // 课程列表组件
         Vue.component('course-list', {
@@ -207,9 +229,11 @@
                     if(this.course) {
                         this.courses.push({name: this.course, price: 0});
                         this.course = '',
-                        this.isShow = true
+                        this.$refs.msgSuccess.toggle()
+                        // this.isShow = true
                     }else {
-                        this.isShowWarn = true
+                        // this.isShowWarn = true
+                        this.$refs.msgWarning.toggle()
                     }
                 },
                 batchUpdate() {
