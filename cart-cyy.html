@@ -1,114 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>购物车</title>
     <style>
-        .active {
-            background-color: #ddd
-        }
-        .message-box {
-            padding: 10px 20px;
-            
-        }
-        .message-box-close {
-            float: right;
-        }
-        .success {
-            background: #4fc08d;
-            border: 1px solid #42b983;
-        }
-        .warning {
-            background: #f66;
-            border: 1px solid #d63200;
-        }
-        /* 动画样式 */
-        /* 入场之前状态 */
-        /* .fade-enter,.fade-leave-to {
+      .active {
+        background-color: #ddd;
+      }
+      .message-box {
+        padding: 10px 20px;
+      }
+      .message-box-close {
+        float: right;
+      }
+      .success {
+        background: #4fc08d;
+        border: 1px solid #42b983;
+      }
+      .warning {
+        background: #f66;
+        border: 1px solid #d63200;
+      }
+      /* 动画样式 */
+      /* 入场之前状态 */
+      /* .fade-enter,.fade-leave-to {
             opacity: 0;
         }
         .fade-enter-active,.fade-leave-active {
             transition: opacity 1.5s
         } */
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1"
+      rel="stylesheet"
+      type="text/css"
+    />
     <script src="https://at.alicdn.com/t/font_1281272_fepjp89tyz9.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <!-- 插值文本 -->
-        <h2 :title="title">{{title}}</h2>
-        
-        <!-- 批量清除弹窗 -->
-        <div>
-            <button @click="$bus.$emit('message-close')">清空提示框</button>
-        </div>
+      <!-- 插值文本 -->
+      <h2 :title="title">{{title}}</h2>
 
-        <!-- 弹窗 -->
-        <!-- <message class="success" :show.sync="isShow"> -->
-        <message class="success" ref="msgSuccess">
-            <!-- 命名为title的具名插槽 -->
-            <template v-slot:title="slotProps">
-                <strong>hello{{ slotProps.title }}</strong>
-            </template>
-            <!-- 默认插槽 -->
-            <template>
-                新增课程成功！
-            </template>
-        </message>
-        
-        <message ref="msgWarning" class="warning">
-            <!-- 命名为title的具名插槽 -->
-            <template v-slot:title>
-                <strong>警告</strong>
-            </template>
-            <!-- 默认插槽 -->
-            <template>
-                请输入课程的名称！
-            </template>
-        </message>
+      <!-- 批量清除弹窗 -->
+      <div v-permission="'admin'">
+        <button @click="$bus.$emit('message-close')">清空提示框</button>
+      </div>
 
-        <!-- 新增课程 -->
-        <course-add v-model="course" @add-course="addCourse"></course-add>
+      <!-- 弹窗 -->
+      <!-- <message class="success" :show.sync="isShow"> -->
+      <message class="success" ref="msgSuccess">
+        <!-- 命名为title的具名插槽 -->
+        <template v-slot:title="slotProps">
+          <strong>hello{{ slotProps.title }}</strong>
+        </template>
+        <!-- 默认插槽 -->
+        <template>
+          新增课程成功！
+        </template>
+      </message>
 
-        <!-- 批量更新课程价格 -->
-        <p>
-            <input v-model.number="price" type="number" step="1" />
-            <button @click="batchUpdate">批量更新价格</button>
-        </p>
+      <message ref="msgWarning" class="warning">
+        <!-- 命名为title的具名插槽 -->
+        <template v-slot:title>
+          <strong>警告</strong>
+        </template>
+        <!-- 默认插槽 -->
+        <template>
+          请输入课程的名称！
+        </template>
+      </message>
 
-        <!-- 课程列表组件 -->
-        <course-list :courses="courses"></course-list>
+      <!-- 新增课程 -->
+      <course-add v-model="course" @add-course="addCourse"></course-add>
 
-        <!-- 商品总数 -->
-        <p>
-            <!-- 表达式 -->
-            <!-- 课程总数: {{courses.length + ' 门'}} -->
-            <!-- 计算属性 -->
-            <!-- 课程总数: {{total}} -->
-            <!-- 监听器 -->
-            课程总数: {{totalCount}}
-        </p>
+      <!-- 批量更新课程价格 -->
+      <p>
+        <input v-model.number="price" type="number" step="1" />
+        <button @click="batchUpdate">批量更新价格</button>
+      </p>
 
+      <!-- 课程列表组件 -->
+      <course-list :courses="courses"></course-list>
+
+      <!-- 商品总数 -->
+      <p>
+        <!-- 表达式 -->
+        <!-- 课程总数: {{courses.length + ' 门'}} -->
+        <!-- 计算属性 -->
+        <!-- 课程总数: {{total}} -->
+        <!-- 监听器 -->
+        课程总数: {{totalCount}}
+      </p>
     </div>
     <script src="vue.js"></script>
     <script>
-        // 总线
-        Vue.prototype.$bus = new Vue()
-        // 弹窗组件
-        Vue.component('message', {
-            // props: ['show'],
-            data() {
-                return {
-                    title: '来自子组件的标题',
-                    show: false
-                }
-            },
-            template: `
+      // 总线
+      Vue.prototype.$bus = new Vue();
+      // 弹窗组件
+      Vue.component("message", {
+        // props: ['show'],
+        data() {
+          return {
+            title: "来自子组件的标题",
+            show: false
+          };
+        },
+        template: `
                 <transition 
                 name="custom-classes-transition"
                 enter-active-class="animated tada"
@@ -120,38 +121,38 @@
                     </div>
                 </transition>
             `,
-            mounted() {
-                this.$bus.$on('message-close',()=>{
-                    this.toggle()
-                    // this.$emit('update:show',false)
-                })
-            },
-            methods: {
-                toggle() {
-                    this.show = !this.show
-                }
-            },
-        })
-        // 课程列表组件
-        Vue.component('course-list', {
-            data() {
-                return {
-                    selectedCourse: ''
-                }
-            },
-            props: {
-                courses: {
-                    type: Array,
-                    default: () => []
-                }
-            },
-            template: `<!-- 条件渲染 -->
+        mounted() {
+          this.$bus.$on("message-close", () => {
+            this.toggle();
+            // this.$emit('update:show',false)
+          });
+        },
+        methods: {
+          toggle() {
+            this.show = !this.show;
+          }
+        }
+      });
+      // 课程列表组件
+      Vue.component("course-list", {
+        data() {
+          return {
+            selectedCourse: ""
+          };
+        },
+        props: {
+          courses: {
+            type: Array,
+            default: () => []
+          }
+        },
+        template: `<!-- 条件渲染 -->
                 <p v-if="courses.length == 0">没有任何课程信息</p>
                 <!-- 列表渲染 -->
                 <div v-else>
                     <div v-for="(item,index) in courses" :key="index" :class="{active: selectedCourse === item}"
                     @click="selectedCourse = item">
-                        {{ item.name }} - ￥ {{ item.price }}
+                        {{ item.name }} - {{ item.price | currency('$') }}
                     </div>
                     <!-- style -->
                     <!-- <div v-for="item in courses" :key="item" 
@@ -159,125 +160,143 @@
                     @click="selectedCourse = item">
                         {{ item }}
                     </div> -->
-                </div>`
-        })
-        // 课程新增组件
-        Vue.component('course-add', {
-            // model: {
-            //     value: 'value',
-            //     event: 'input'
-            // },
-            props: ['value'],
-            template: `<!-- 表单输入 -->
+                </div>`,
+        filters: {
+          currency: function(value, symbol = "￥") {
+            return symbol + value;
+          }
+        }
+      });
+      // 课程新增组件
+      Vue.component("course-add", {
+        // model: {
+        //     value: 'value',
+        //     event: 'input'
+        // },
+        props: ["value"],
+        template: `<!-- 表单输入 -->
                  <div>
                     <p>
-                        <input ref="inp" type="text" :value="value" @input="onInput" @keydown.enter="addCourse">
+                        <input ref="inp" v-focus type="text" :value="value" @input="onInput" @keydown.enter="addCourse">
                         <button @click="addCourse">新增</button>
                     </p>
                 </div>
                 `,
-            methods: {
-                addCourse() {
-                    // 派发事件通知父组件新增课程
-                    this.$emit('add-course');
-                },
-                onInput(e) {
-                    this.$emit('input', e.target.value)
-                }
-            },
-            mounted () {
-                this.$refs.inp.focus();
-            },
-        })
-
-        const app = new Vue({
-            el: '#app',
-            data() {
-                return {
-                    title: '购物车',
-                    course: '',
-                    courses: [],
-                    totalCount: 0,
-                    isShow: false,
-                    isShowWarn: false,
-                    price: 0
-                }
-            },
-            beforeCreate() {
-                // console.log('beforeCreate');
-            },
-            async created() {
-                // console.log('created');
-                this.courses = await this.getCourses();
-                // 批量更新课程价格
-                this.batchUpdate()
-            },
-            beforeMount() {
-                // console.log('beforeMount');
-            },
-            mounted() {
-                // console.log('mounted');
-            },
-            beforeUpdate() {
-                // console.log('beforeUpdate')
-            },
-            updated() {
-                // console.log('updated')
-            },
-            methods: {
-                addCourse() {
-                    if(this.course) {
-                        this.courses.push({name: this.course, price: 0});
-                        this.course = '',
-                        this.$refs.msgSuccess.toggle()
-                        // this.isShow = true
-                    }else {
-                        // this.isShowWarn = true
-                        this.$refs.msgWarning.toggle()
-                    }
-                },
-                batchUpdate() {
-                    this.courses.forEach(element => {
-                        Vue.set(element,'price',this.price)
-                    });
-                    // this.courses.map((item)=> item.price = this.price)
-                },
-                getCourses() {
-                    return new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve([{name: 'web全栈'},{name: 'web高级'}])
-                        }, 0)
-                    })
-                }
-            },
-            computed: {
-                total() {
-                    return this.courses.length + ' 门'
-                }
-            },
-            // 默认情况下watch初始化不执行
-            // watch: {
-            //     courses(newValue, oldValue) {
-            //         this.totalCount = newValue.length + '门'
-            //     }
-            // },
-            // 带选项的watch
-            watch: {
-                courses: {
-                    immediate: true,
-                    deep: true,
-                    handler(newValue, oldValue) {
-                        this.totalCount = newValue.length + '门'
-                    }
-                }
-            },
-            // render() {
-            //     with(this){return _c('div',{attrs:{"id":"app"}},[_c('h2',{attrs:{"title":title}},[_v(_s(title))]),_v(" "),_c('p',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(course),expression:"course"}],domProps:{"value":(course)},on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_k($event.keyCode,"enter",13,$event.key,"Enter"))return null;return addCourse($event)},"input":function($event){if($event.target.composing)return;course=$event.target.value}}}),_v(" "),_c('button',{on:{"click":addCourse}},[_v("新增")])]),_v(" "),(courses.length == 0)?_c('p',[_v("没有任何课程信息")]):_c('div',_l((courses),function(item){return _c('div',{key:item,class:{active: selectedCourse === item},on:{"click":function($event){selectedCourse = item}}},[_v("\n                "+_s(item)+"\n            ")])}),0)])}
-            // }
-        })
-        // 虚拟dom
-        console.log(app.$options.render)
+        methods: {
+          addCourse() {
+            // 派发事件通知父组件新增课程
+            this.$emit("add-course");
+          },
+          onInput(e) {
+            this.$emit("input", e.target.value);
+          }
+        },
+        mounted() {
+        //   this.$refs.inp.focus();
+        }
+      });
+      Vue.filter("currency", function(value) {
+        return value;
+      });
+      // 自定义指令
+      Vue.directive('focus',{
+          inserted(el) {
+            el.focus()
+          }
+      })
+      Vue.directive('permission',{
+        inserted(el,binding) {
+            if(binding.value !== 'admin') {
+                el.parentElement.removeChild(el)
+            }
+        }
+      })
+      const app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            title: "购物车",
+            course: "",
+            courses: [],
+            totalCount: 0,
+            isShow: false,
+            isShowWarn: false,
+            price: 0
+          };
+        },
+        beforeCreate() {
+          // console.log('beforeCreate');
+        },
+        async created() {
+          // console.log('created');
+          this.courses = await this.getCourses();
+          // 批量更新课程价格
+          this.batchUpdate();
+        },
+        beforeMount() {
+          // console.log('beforeMount');
+        },
+        mounted() {
+          // console.log('mounted');
+        },
+        beforeUpdate() {
+          // console.log('beforeUpdate')
+        },
+        updated() {
+          // console.log('updated')
+        },
+        methods: {
+          addCourse() {
+            if (this.course) {
+              this.courses.push({ name: this.course, price: 0 });
+              (this.course = ""), this.$refs.msgSuccess.toggle();
+              // this.isShow = true
+            } else {
+              // this.isShowWarn = true
+              this.$refs.msgWarning.toggle();
+            }
+          },
+          batchUpdate() {
+            this.courses.forEach(element => {
+              Vue.set(element, "price", this.price);
+            });
+            // this.courses.map((item)=> item.price = this.price)
+          },
+          getCourses() {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                resolve([{ name: "web全栈" }, { name: "web高级" }]);
+              }, 0);
+            });
+          }
+        },
+        computed: {
+          total() {
+            return this.courses.length + " 门";
+          }
+        },
+        // 默认情况下watch初始化不执行
+        // watch: {
+        //     courses(newValue, oldValue) {
+        //         this.totalCount = newValue.length + '门'
+        //     }
+        // },
+        // 带选项的watch
+        watch: {
+          courses: {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+              this.totalCount = newValue.length + "门";
+            }
+          }
+        }
+        // render() {
+        //     with(this){return _c('div',{attrs:{"id":"app"}},[_c('h2',{attrs:{"title":title}},[_v(_s(title))]),_v(" "),_c('p',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(course),expression:"course"}],domProps:{"value":(course)},on:{"keydown":function($event){if(!$event.type.indexOf('key')&&_k($event.keyCode,"enter",13,$event.key,"Enter"))return null;return addCourse($event)},"input":function($event){if($event.target.composing)return;course=$event.target.value}}}),_v(" "),_c('button',{on:{"click":addCourse}},[_v("新增")])]),_v(" "),(courses.length == 0)?_c('p',[_v("没有任何课程信息")]):_c('div',_l((courses),function(item){return _c('div',{key:item,class:{active: selectedCourse === item},on:{"click":function($event){selectedCourse = item}}},[_v("\n                "+_s(item)+"\n            ")])}),0)])}
+        // }
+      });
+      // 虚拟dom
+      console.log(app.$options.render);
     </script>
-</body>
-
+  </body>
 </html>

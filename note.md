@@ -79,7 +79,10 @@
   - 在 CSS 过渡和动画中自动应用 class 
   - [结合自定义过渡的类名](https://cn.vuejs.org/v2/guide/transitions.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%B8%A1%E7%9A%84%E7%B1%BB%E5%90%8D)，配合使用第三方 CSS 动画库，如 Animate.css 
   - 在过渡钩子函数中使用 JavaScript 直接操作 DOM 可以配合使用第三方JavaScript 动画库，如 Velocity.js
-
+* 过滤器
+* 自定义指令
+* 渲染函数
+* 
 
 
 
