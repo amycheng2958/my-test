@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
-import animated from 'animate.css' 
+import animated from 'animate.css'
+import router from './router'
 Vue.use(animated)
 Vue.config.productionTip = false
 
+
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
