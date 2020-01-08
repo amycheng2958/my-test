@@ -15,6 +15,11 @@ const routes = [
     component: Home
   },
   {
+    path: "/login",
+    name: "login",
+    component: () => import("../views/Login.vue")
+  },
+  {
     path: "/admin",
     name: "admin",
     // route level code-splitting
@@ -27,7 +32,10 @@ const routes = [
         name: "detail",
         component: () => import("../views/Detail.vue")
       }
-    ]
+    ],
+    meta: {
+      auth: true
+    }
   },
   {
     path: "/course/:name",
@@ -44,5 +52,17 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
-
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+    if(to.meta.auth) {
+      // 是否登录
+      if(window.isLogin) {
+        next()
+      }else {
+        next('/login?redirect='+to.fullPath)
+      }
+    }else {
+      next()
+    }
+})
 export default router;

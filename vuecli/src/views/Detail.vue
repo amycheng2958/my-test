@@ -7,7 +7,19 @@
 
 <script>
     export default {
-        
+        data() {
+            return {
+            }
+        },
+        // watch: {
+        //     $route: {
+        //         immediate: true,
+        //         deep: true,
+        //         handler(newValue) {
+        //             alert(1)
+        //         }
+        //     }
+        // },
     }
 </script>
 
