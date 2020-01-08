@@ -1,12 +1,15 @@
 <template>
     <div>
-        <button @click="login" v-if="isLogin">登录</button>
+        <button @click="login" v-if="!isLogin">登录</button>
         <button @click="logout" v-else>注销</button>
     </div>
 </template>
 
 <script>
     export default {
+        created () {
+            window.isLogin = false;
+        },
         computed: {
             isLogin() {
                 return window.isLogin

@@ -35,11 +35,6 @@ export default {
       default: () => []
     }
   },
-  watch: {
-    courses(newValue) {
-      this.selectedCourse = newValue.length && newValue[0];
-    }
-  },
   filters: {
     currency: function(value, symbol = "￥") {
       return symbol + value;

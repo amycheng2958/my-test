@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
-}
+};
 const routes = [
   {
     path: "/",
@@ -25,7 +25,8 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/Admin.vue"),
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Admin.vue"),
     children: [
       {
         path: "/admin/course/:name",
@@ -36,6 +37,15 @@ const routes = [
     meta: {
       auth: true
     }
+    // 路由守卫
+    // beforeEnter(to, from, next) {
+    //   // 是否登录
+    //   if (window.isLogin) {
+    //     next();
+    //   } else {
+    //     next("/login?redirect=" + to.fullPath);
+    //   }
+    // }
   },
   {
     path: "/course/:name",
@@ -53,16 +63,16 @@ const router = new VueRouter({
   routes
 });
 // 全局前置守卫
-router.beforeEach((to, from, next) => {
-    if(to.meta.auth) {
-      // 是否登录
-      if(window.isLogin) {
-        next()
-      }else {
-        next('/login?redirect='+to.fullPath)
-      }
-    }else {
-      next()
-    }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.auth) {
+//     // 是否登录
+//     if (window.isLogin) {
+//       next();
+//     } else {
+//       next("/login?redirect=" + to.fullPath);
+//     }
+//   } else {
+//     next();
+//   }
+// });
 export default router;

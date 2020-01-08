@@ -1,6 +1,6 @@
 <template>
   <div class="admin">
-    <img :src="`${publicPath}assets/logo.png`"/>
+    <img :src="`${publicPath}assets/logo.png`" />
     <div class="hello">
       <h2 :title="title">{{ title }}</h2>
       <!-- 批量清除弹窗 -->
@@ -25,9 +25,7 @@
         </template>
         <!-- <template v-slot:title></template> -->
         <!-- 默认插槽 -->
-        <template v-slot:default>
-          新增课程成功！
-        </template>
+        <template v-slot:default>新增课程成功！</template>
       </message>
 
       <message ref="msgWarning" class="warning" :show.sync="isShowWarn">
@@ -36,9 +34,7 @@
           <strong>警告</strong>
         </template>
         <!-- 默认插槽 -->
-        <template>
-          请输入课程的名称！
-        </template>
+        <template>请输入课程的名称！</template>
       </message>
     </div>
     <router-view></router-view>
@@ -90,6 +86,14 @@ export default {
         this.isShowWarn = true;
         // this.$refs.msgWarning.toggle();
       }
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    // 是否登录
+    if (window.isLogin) {
+      next();
+    } else {
+      next("/login?redirect=" + to.fullPath);
     }
   },
   async created() {

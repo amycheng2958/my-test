@@ -1,28 +1,30 @@
 <template>
-    <div>
-        <p>detail page</p>
-        <p>{{$route.params.name}}</p>
-    </div>
+  <div>
+    <p>detail page</p>
+    <p>{{$route.params.name}}</p>
+  </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-            }
-        },
-        // watch: {
-        //     $route: {
-        //         immediate: true,
-        //         deep: true,
-        //         handler(newValue) {
-        //             alert(1)
-        //         }
-        //     }
-        // },
-    }
+export default {
+  data() {
+    return {};
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log(1);
+    next()
+  }
+  // watch: {
+  //     $route: {
+  //         immediate: true,
+  //         deep: true,
+  //         handler(newValue) {
+  //             alert(1)
+  //         }
+  //     }
+  // },
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

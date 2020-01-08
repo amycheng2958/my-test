@@ -29,8 +29,6 @@ module.exports = {
     //     }, 1000);
     //   })
     // }
-    proxy: 'http://localhost:3000'
-  },
-
-  lintOnSave: false
+    proxy: "http://localhost:3000"
+  }
 };
