@@ -4,10 +4,21 @@
     enter-active-class="animated tada"
     leave-active-class="animated bounceOutRight"
   >
-    <div class="message-box" v-if="show">
-      <slot name="subtitle" :title="title">默认标题</slot>
-      <slot></slot>
-      <span class="message-box-close" @click="toggle">X</span>
+    <div
+      v-if="show"
+      class="message-box"
+    >
+      <slot
+        name="subtitle"
+        :title="title"
+      >
+        默认标题
+      </slot>
+      <slot />
+      <span
+        class="message-box-close"
+        @click="toggle"
+      >X</span>
     </div>
   </transition>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>detail page</p>
-    <p>{{$route.params.name}}</p>
+    <p>{{ $route.params.name }}</p>
   </div>
 </template>
 

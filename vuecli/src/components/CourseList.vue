@@ -1,6 +1,8 @@
 <template>
   <div :class="['courselist',$style.red]">
-    <p v-if="courses.length == 0">没有任何课程信息</p>
+    <p v-if="courses.length == 0">
+      没有任何课程信息
+    </p>
     <div v-else>
       <p
         v-for="(item, index) in courses"
@@ -8,8 +10,8 @@
         :class="{ [$style.active]: selectedCourse === item }"
         @click="onClick(item)"
       >
-      {{ item.name }} - {{ item.price | currency("$") }}
-       <!-- <router-link :to="`/admin/course/${item.name}`"> {{ item.name }} - {{ item.price | currency("$") }}</router-link> -->
+        {{ item.name }} - {{ item.price | currency("$") }}
+        <!-- <router-link :to="`/admin/course/${item.name}`"> {{ item.name }} - {{ item.price | currency("$") }}</router-link> -->
       </p>
       <!-- style -->
       <!-- <div v-for="item in courses" :key="item" 
@@ -24,10 +26,10 @@
 <script>
 export default {
   name: "CourseList",
-  data() {
-    return {
-      selectedCourse: ""
-    };
+  filters: {
+    currency: function(value, symbol = "￥") {
+      return symbol + value;
+    }
   },
   props: {
     courses: {
@@ -35,10 +37,10 @@ export default {
       default: () => []
     }
   },
-  filters: {
-    currency: function(value, symbol = "￥") {
-      return symbol + value;
-    }
+  data() {
+    return {
+      selectedCourse: ""
+    };
   },
   methods: {
     onClick(item) {
