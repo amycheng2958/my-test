@@ -11,7 +11,6 @@ export default {
     return {};
   },
   beforeRouteUpdate(to, from, next) {
-    console.log(1);
     next()
   }
   // watch: {
