@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vue-cyy</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <button-counter name="01"></button-counter>
+      <button-counter name="02"></button-counter>
+      <button-counter name="03"></button-counter>
+      <blog-post v-for="(item, index) in posts" :key="index" :title="item.title"></blog-post> 
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+      Vue.component("button-counter", {
+        data() {
+          return {
+            count: 0
+          };
+        },
+        props: {
+          name: {
+            type: String,
+            default: ""
+          }
+        },
+        template:
+          '<button v-on:click="count++">You clicked {{name}} 了 {{ count }} times.</button>'
+      });
+      Vue.component("blog-post", {
+        props: {
+          title: {
+            type: String,
+            default: ""
+          }
+        },
+        template: '<h2>{{title}}</h2>'
+      });
+      const app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            posts: [
+              { id: 1, title: "My journey with Vue" },
+              { id: 2, title: "Blogging with Vue" },
+              { id: 3, title: "Why Vue is so fun" }
+            ]
+          };
+        }
+      });
+    </script>
+  </body>
+</html>
