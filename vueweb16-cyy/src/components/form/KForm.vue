@@ -25,11 +25,8 @@
             validate(cb) {
                 const tasks = this.$children
                 .filter(item => item.prop)
-                .map(item =>{
-                    console.log(item.validate().then((res)=>{console.log(res)}))
-                })
+                .map(item =>item.validate())
                 Promise.all(tasks).then(()=>{
-                    alert(1)
                     cb(true)
                 }).catch(()=>{
                     cb(false)

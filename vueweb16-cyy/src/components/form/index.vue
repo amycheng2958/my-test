@@ -37,12 +37,17 @@ export default {
     KForm
   },
   methods: {
-      login() {
-          this.$refs['loginForm'].validate(valid=>{ 
-              console.log(valid)
-           })
-      }
-  },
+    login() {
+      this.$refs["loginForm"].validate(valid => {
+        const notice = this.$notice({
+          title: "社会你杨哥喊你来搬砖",
+          message: valid ? "请求登录!" : "校验失败!",
+          duration: 2000
+        });
+        notice.show();
+      });
+    }
+  }
 };
 </script>
 

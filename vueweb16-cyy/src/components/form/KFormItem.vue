@@ -35,6 +35,8 @@ export default {
       return validator.validate({ [this.prop]: value }, (errors, fields) => {
         if (errors) {
           this.error = errors[0].message;
+        }else {
+            this.error = ''
         }
       });
     }
